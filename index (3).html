@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>УБЕГАЙ ОТ ЗОЛИКОВ · БАГНУТАЯ ДЕМА</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1200;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Segoe UI', 'Poppins', 'Comic Sans MS', cursive, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Жёлтые пятна на фоне */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ffd966 0%, transparent 70%);
+            top: 10%;
+            left: 5%;
+            filter: blur(60px);
+            opacity: 0.5;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #f5b042 0%, transparent 70%);
+            bottom: 0;
+            right: 0;
+            filter: blur(100px);
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .game-card {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 245, 180, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: 80px 80px 50px 50px;
+            padding: 50px 40px;
+            box-shadow: 0 40px 0 #b47d00, 0 60px 60px rgba(0,0,0,0.6), 0 0 0 8px #ffd966, 0 0 0 12px #ffaa00;
+            border: 6px dashed #ffb703;
+            transform: rotate(0.5deg);
+            transition: 0.3s;
+        }
+
+        .game-card:hover {
+            transform: rotate(0deg) scale(1.01);
+            box-shadow: 0 45px 0 #b47d00, 0 70px 70px black;
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #1e2a00;
+            text-transform: uppercase;
+            text-shadow: 8px 8px 0 #fd0, 12px 12px 0 #ff9500, 15px 15px 20px black;
+            line-height: 1;
+            letter-spacing: -2px;
+            word-break: break-word;
+            margin-bottom: 10px;
+            transform: skew(-3deg) rotate(-1deg);
+            display: inline-block;
+            background: linear-gradient(145deg, #ffe484, #ffc107);
+            padding: 10px 30px;
+            border-radius: 100px 30px 100px 30px;
+            border: 5px solid #c68500;
+        }
+
+        .badge-version {
+            background: #2d2000;
+            color: #ffd966;
+            font-size: 1.8rem;
+            font-weight: 800;
+            padding: 12px 35px;
+            border-radius: 60px;
+            display: inline-block;
+            margin: 10px 0 20px;
+            border: 5px solid #ffaa33;
+            box-shadow: 0 10px 0 #6b4f00, 0 0 20px #ffbb00;
+            transform: rotate(-1deg);
+            backdrop-filter: blur(4px);
+        }
+
+        .game-meta {
+            background: #ffed9e;
+            border-radius: 90px 30px 90px 30px;
+            padding: 35px 25px;
+            margin: 30px 0;
+            border: 6px double #ff9900;
+            box-shadow: inset 0 -8px 0 #c27e00, 0 15px 20px #3f3000;
+            transform: rotate(0.8deg);
+        }
+
+        .game-description {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #312700;
+            line-height: 1.5;
+        }
+
+        .game-description p {
+            margin: 15px 0;
+            background: #ffe45c;
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 100px;
+            box-shadow: 0 7px 0 #b87c00;
+            transform: rotate(-1deg);
+        }
+
+        .highlight-bug {
+            background: #ff4d00;
+            color: #fff7b5;
+            padding: 8px 25px;
+            border-radius: 40px;
+            font-size: 2rem;
+            font-weight: 900;
+            display: inline-block;
+            border: 3px dotted #fff7b5;
+            transform: rotate(2deg);
+            text-shadow: 3px 3px 0 #b83300;
+        }
+
+        .demo-note {
+            background: #ffb347;
+            color: #1f1800;
+            font-size: 1.9rem;
+            padding: 18px;
+            border-radius: 70px;
+            font-weight: bold;
+            margin: 25px 0 5px;
+            border: 6px ridge #ffdd55;
+            box-shadow: 0 12px 0 #9e6b00, 0 0 30px #ffb703;
+            transform: skew(1deg);
+        }
+
+        /* Секция загрузки ZIP */
+        .upload-area {
+            background: #fcd34d;
+            border-radius: 100px 30px 100px 30px;
+            padding: 35px 20px;
+            border: 8px dotted #a57000;
+            margin: 40px 0 30px;
+            box-shadow: 0 20px 0 #a57000, inset 0 2px 20px #ffeeaa;
+            transition: 0.2s;
+        }
+
+        .upload-area label {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: #2a1f00;
+            display: block;
+            margin-bottom: 25px;
+            text-decoration: underline wavy #ff5100 5px;
+            text-shadow: 3px 3px 0 #ffdb8a;
+        }
+
+        .file-input-wrapper {
+            background: #ffe99b;
+            padding: 20px;
+            border-radius: 80px;
+            border: 5px solid #d19100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            box-shadow: inset 0 2px 15px #ffbc6e;
+        }
+
+        input[type="file"] {
+            font-size: 1.6rem;
+            background: #ffc164;
+            border: 6px solid #8f6400;
+            padding: 18px 28px;
+            border-radius: 60px;
+            width: 340px;
+            color: #1f1700;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        input[type="file"]:hover {
+            background: #ffb83d;
+            border-color: #613f00;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #3f2e00;
+            color: #ffe268;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-right: 20px;
+            border: 3px solid #ffbe2e;
+            transition: 0.1s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #5f4300;
+        }
+
+        .zip-status {
+            background: #ffcf5c;
+            border-radius: 60px;
+            padding: 20px;
+            margin-top: 25px;
+            border: 6px solid #a86400;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2d2100;
+            word-break: break-word;
+            box-shadow: inset 0 0 20px #ffa600, 0 7px 0 #7b5100;
+        }
+
+        .download-btn {
+            background: #f5b300;
+            border: none;
+            font-size: 4rem;
+            font-weight: 900;
+            padding: 30px 50px;
+            border-radius: 120px;
+            color: #201800;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 25px 0 #b06f00, 0 20px 35px black, 0 0 0 6px #ffe484;
+            border: 4px solid #ffdd88;
+            transition: 0.05s linear;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            cursor: pointer;
+            margin: 25px 0 10px;
+            transform: rotate(-1deg);
+        }
+
+        .download-btn:active {
+            transform: translateY(15px) rotate(-1deg);
+            box-shadow: 0 10px 0 #b06f00, 0 20px 30px black;
+        }
+
+        /* Бонус: загрузка картинки (для фана) */
+        .image-upload-side {
+            background: #ffc800;
+            border-radius: 60px;
+            padding: 25px;
+            margin: 40px 0 10px;
+            border: 8px ridge #ffaa22;
+        }
+
+        .image-upload-side label {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2d2100;
+        }
+
+        .image-preview-box {
+            margin-top: 20px;
+            background: #ffd966;
+            border-radius: 50px;
+            padding: 20px;
+            border: 6px dashed #a05f00;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 40px;
+            border: 8px solid #fec542;
+            box-shadow: 12px 12px 0 #8f6400;
+            background: #ffbc6e;
+            padding: 5px;
+        }
+
+        .no-image-text {
+            background: #ad7f29;
+            color: #ffeeaa;
+            font-size: 2rem;
+            padding: 30px;
+            border-radius: 50px;
+            border: 3px dashed #ffd966;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 1.8rem;
+            color: #2d2400;
+            background: #ffe68f;
+            padding: 20px;
+            border-radius: 100px;
+            border: 6px solid #b47d00;
+            box-shadow: 0 12px 0 #7b5a00;
+            transform: rotate(0.5deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-card">
+        <h1>УБЕГАЙ<br>ОТ ЗОЛИКОВ!</h1>
+        <div class="badge-version">💀 ВЕРСИЯ 1.0 · БАГНУТАЯ ДЕМА 💀</div>
+
+        <div class="game-meta">
+            <div class="game-description">
+                <p><span class="highlight-bug">ЗОЛИКИ</span> НАСТУПАЮТ</p>
+                <p>⚡ ГЛЮКИ — ЭТО ФИЧИ ⚡</p>
+                <p>🤪 ВЫЛЕТАЕТ, ЕСЛИ ДОЛГО СМОТРЕТЬ</p>
+            </div>
+            <div class="demo-note">
+                🐞 1-я версия: багов больше чем кода<br>
+                🔥 загрузи свой ЗИП и убегай
+            </div>
+        </div>
+
+        <!-- ЗАГРУЗКА ZIP (ОСНОВНАЯ) -->
+        <div class="upload-area">
+            <label>📦 ЗАГРУЗИ СВОЙ ZIP (ФАЙЛ ИГРЫ)</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="zipUpload" accept=".zip,.7z,.rar,.tar.gz">
+                <span style="font-size:4rem;">🔥</span>
+            </div>
+            <div class="zip-status" id="zipStatus">
+                😴 файл не выбран
+            </div>
+        </div>
+
+        <!-- КНОПКА СКАЧИВАНИЯ -->
+        <div style="text-align: center;">
+            <a href="#" class="download-btn" onclick="downloadGame()">⬇️ СКАЧАТЬ ⬇️</a>
+            <div style="font-size:1.8rem; margin-top:10px; background: #ffc107; padding:8px 20px; border-radius:50px; display:inline-block; border:3px solid #9f6f00;">
+                (если ZIP не загружен — скачается демо-версия)
+            </div>
+        </div>
+
+        <!-- БОНУС: ЗАГРУЗКА КАРТИНКИ (ПРОСТО ДЛЯ КАЙФА) -->
+        <div class="image-upload-side">
+            <label>📸 ЗАГРУЗИ СВОЮ КАРТИНКУ (для настроения)</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="imageUpload" accept="image/*">
+                <span style="font-size:3rem;">✨</span>
+            </div>
+            <div class="image-preview-box" id="previewBox">
+                <div id="previewContainer" style="display: flex; justify-content: center;">
+                    <div class="no-image-text" id="defaultPreviewText">🖼️ тут будет твоя картинка</div>
+                    <img id="uploadedImage" class="image-preview" src="#" alt="твоя картинка" style="display: none;">
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            💛 БАГИ, ЖЁЛТЫЙ И БЕЗУМИЕ 💛<br>
+            <span style="font-size:1.2rem;">выбери ZIP → нажми СКАЧАТЬ → получишь свою игру</span>
+        </footer>
+    </div>
+
+    <script>
+        // ==================== РАБОТА С ZIP ====================
+        let uploadedZipBlob = null;          // загруженный ZIP файл
+        let uploadedZipName = '';            // его имя
+
+        const zipInput = document.getElementById('zipUpload');
+        const zipStatus = document.getElementById('zipStatus');
+
+        zipInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // можно разрешить любые архивы, но для вида проверяем
+                if (!file.name.toLowerCase().endsWith('.zip') && !file.name.toLowerCase().endsWith('.7z') && !file.name.toLowerCase().endsWith('.rar')) {
+                    zipStatus.innerHTML = '❌ нужен ZIP / 7z / RAR';
+                    uploadedZipBlob = null;
+                    return;
+                }
+                // Сохраняем файл как Blob
+                uploadedZipBlob = file;
+                uploadedZipName = file.name;
+                zipStatus.innerHTML = `✅ загружен: <strong>${file.name}</strong> (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            } else {
+                uploadedZipBlob = null;
+                zipStatus.innerHTML = '😴 файл не выбран';
+            }
+        });
+
+        // Функция скачивания
+        window.downloadGame = function() {
+            if (uploadedZipBlob) {
+                // Создаём ссылку на загруженный файл
+                const url = URL.createObjectURL(uploadedZipBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = uploadedZipName;   // скачивается с оригинальным именем
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);        // очистка памяти
+            } else {
+                // Если файл не загружен — скачиваем демо-заглушку (пустой архив с текстом)
+                alert('Загрузи свой ZIP, а пока держи демо-версию (пустышку)');
+                const fakeZipContent = 'UEsDBAoAAAAAADpGQFQAAAAAAAAAAAAAAAAFABwAZW1wdHlVVAkAA/0RZGZ9EWRmdXgLAAEE6AMAAAToAwAAUEsBAh4DCgAAAAAAOkZAVAAAAAAAAAAAAAAAAAUAGAAAAAAAAAAAAKSBAAAAAGVtcHR5VVQFAAP9EWRmdXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEATgAAAC8AAAAAAA=='; // base64 пустого zip
+                const link = document.createElement('a');
+                link.href = 'data:application/zip;base64,' + fakeZipContent;
+                link.download = 'Zoliki_demo_bug_v1.zip';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        };
+
+        // ==================== РАБОТА С КАРТИНКОЙ (необязательно) ====================
+        const imageInput = document.getElementById('imageUpload');
+        const uploadedImage = document.getElementById('uploadedImage');
+        const defaultText = document.getElementById('defaultPreviewText');
+
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage.src = e.target.result;
+                    uploadedImage.style.display = 'inline-block';
+                    defaultText.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                uploadedImage.src = '#';
+                uploadedImage.style.display = 'none';
+                defaultText.style.display = 'flex';
+                if (file) alert('Пожалуйста, выбери картинку');
+            }
+        });
+
+        // дополнительный эффект: при перетаскивании файла на окно (простейший drag & drop для ZIP)
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        document.body.addEventListener('drop', function(e) {
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            if (file && (file.name.endsWith('.zip') || file.name.endsWith('.7z') || file.name.endsWith('.rar'))) {
+                // эмулируем выбор файла в input
+                zipInput.files = dt.files;
+                // вручную запустим событие change
+                const event = new Event('change', { bubbles: true });
+                zipInput.dispatchEvent(event);
+            } else {
+                alert('Можно перетащить только ZIP/RAR/7Z');
+            }
+        });
+    </script>
+</body>
+</html>
